@@ -1,24 +1,16 @@
 import numpy as np
 
-CONST_POINT_INIT='points'
-CONST_UNIF_INIT='unif'
-
 class KMeans:
-    def __init__(self, K=3, init=CONST_POINT_INIT):
+    def __init__(self, K=3):
         self.K = K
         self.labels = None
         self.old_labels = None
-        self.init = init
     
     def init_means(self, X, K):
-        labels = self.assign_random_labels(X, K)
-        mu = self.compute_mu(X,K,labels)
-        print("Initial mu shape:")
-        print(mu.shape)
-        return mu
+        return self.compute_mu(X,K,self.assign_random_labels(X, K))
     
     def init_means_points(self, X, K):
-        return np.array(X[np.floor(np.random.random(size=K)*X.shape[0]).astype('int')])
+        return np.array(X[np.floor(np.random.random(size=K)*X.shape[0]).astype('int'),:])
 
     def compute_mu(self, X, K, labels):
         return np.array([X[labels == i].mean(axis=0) for i in range(self.K)])
@@ -43,13 +35,9 @@ class KMeans:
 
     def fit(self, X):
         self.X = X
-        if self.init == CONST_POINT_INIT:
-            self.mu = self.init_means_points(self.X, self.K)
-        elif self.init == CONST_UNIF_INIT:
-            self.mu = self.init_means(self.X, self.K)
-        else
-            self.mu = self.init_means_points(self.X, self.K)
-            case _:
-                print('Warning: incorrect value specified for \'init\': {}', self.init)
+        self.mu = self.init_means_points(self.X, self.K)
+        #self.mu = self.init_means(self.X, self.K)
+        print("Initial mu:")
+        print(self.mu)
         while not self.iteration(self.X, self.K):
             print(self.mu)
